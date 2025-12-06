@@ -134,7 +134,8 @@ class FM(nn.Module):
         # 3. optional decoding step
 
         for i in range(self.timesteps):
-            imgs = imgs + self.model(imgs, labels, self.dt * i) * self.dt
+            t = torch.full((labels.shape[0], ), self.dt * i, device = device, dtype=torch.float)
+            imgs = imgs + self.model(imgs, labels, t) * self.dt
 
         if self.use_vae:
             imgs = self.vae.decoder(imgs)
